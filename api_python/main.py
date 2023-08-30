@@ -1042,3 +1042,56 @@ async def search_product_name(nome, current_user: User = Depends(get_active_user
     cursor.execute("SELECT * FROM products WHERE nome_peca = '%s'" %(nome))
     sql = cursor.fetchall()
     return sql
+
+# exemplo manipulação de tabelas do banco de dados com alembic // alembic/versions/f9a075ca46e9_.py
+
+def upgrade():
+    op.create_table('user',
+    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('full_name', sa.String(), nullable=True),
+    sa.Column('email', sa.String(), nullable=True),
+    sa.Column('hashed_password', sa.String(length=255), nullable=True),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_index(op.f('ix_user_email'), 'user', ['email'], unique=True)
+    op.create_index(op.f('ix_user_full_name'), 'user', ['full_name'], unique=False)
+
+
+def downgrade():
+    op.drop_index(op.f('ix_user_full_name'), table_name='user')
+    op.drop_index(op.f('ix_user_email'), table_name='user')
+    op.drop_table('user')
+
+# servidor para a API pode ser com docker!
+
+# estrutura de pastas
+.  
+├── alembic  
+│   ├── versions    // diretório contendo arquivos de migração  
+│   └── env.py  
+├── app  
+│   ├── api         // os arquivos api estão localizados neste  
+│   ├── core        // contém arquivos de carregamento de configuração variáveis ​​​​env e função criar/verificar token de acesso JWT     
+│   ├── db          // arquivo de configuração criar sessão de banco de dados  
+│   ├── helpers     // funções de suporte como login_manager, paginação  
+│   ├── models      // modelo de banco de dados, integrado com alambique para auto gerar migração  
+│   ├── schemas     // Esquema Pydantic  
+│   ├── services    // Contém lógica CRUD para comunicação com o banco de dados  
+│   └── main.py     // configuração principal de todo o projeto  
+├── tests  
+│   ├── api         // contém arquivos de teste para cada api  
+│   ├── faker       // contém arquivo de configuração do faker para reutilização  
+│   ├── .env        // config DB test  
+│   └── conftest.py // configuração geral do pytest  
+├── .gitignore  
+├── alembic.ini  
+├── docker-compose.yaml  
+├── Dockerfile  
+├── env.example  
+├── logging.ini     // configuração de registro  
+├── postgresql.conf // arquivo de configuração do postgresql, usado ao executar docker-compose  
+├── pytest.ini      // arquivo de configuração para pytest  
+├── README.md  
+└── requirements.txt
+
+
