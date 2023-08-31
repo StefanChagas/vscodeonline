@@ -1,0 +1,87 @@
+// npm install chart.js
+
+// estrtutura de arquivos: js/charts/bar-charts.js
+
+// inserir no onload
+
+// documentação: https://www.chartjs.org/docs/latest/
+
+// referência dos arquivos "chart": import Chart from 'chart.js/auto';
+
+// referência pelo commonJS ao "chart": const { Chart } = await import('chart.js'); 
+
+<div>
+  <canvas id="myChart"></canvas> // div para exibição do gráfico
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script> // referência 
+
+<script>
+  const ctx = document.getElementById('myChart'); // elemento do html
+
+  new Chart(ctx, { 
+    type: 'bar',
+    data: {
+      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'], // titulos abaixo 
+      datasets: [{
+        label: '# of Votes', // título com referência aos títulos abaixo
+        data: [12, 19, 3, 5, 2, 3], // altura
+        borderWidth: 1,
+        borderRadius: Number.MAX_VALUE,
+      }]
+    },
+    options: {
+      responsive: true,
+      animation: false,
+      scales: {
+        y: {
+          beginAtZero: true // orientação vertical
+        }
+      }
+    }
+  });
+</script>
+
+// outro método ->
+
+import Chart from 'chart.js/auto'
+
+// ou
+
+import {
+  Chart,
+  Colors,
+  BubbleController,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  Legend
+} from 'chart.js'
+
+(async function() {
+  const data = [
+    { year: 2010, count: 10 },
+    { year: 2011, count: 20 },
+    { year: 2012, count: 15 },
+    { year: 2013, count: 25 },
+    { year: 2014, count: 22 },
+    { year: 2015, count: 30 },
+    { year: 2016, count: 28 },
+  ];
+
+  new Chart(
+    document.getElementById('acquisitions'),
+    {
+      type: 'bar',
+      data: {
+        labels: data.map(row => row.year),
+        datasets: [
+          {
+            label: 'Acquisitions by year',
+            data: data.map(row => row.count)
+          }
+        ]
+      }
+    }
+  );
+})();
